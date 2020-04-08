@@ -1,6 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 #include <stdio.h>
-//ц╟ещеепР
+//Е├▓ФЁ║Ф▌▓Е╨▐
 void BubbleSort(int* arr[], int sz)
 {
 	int i = 0;
