@@ -1,13 +1,13 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 #include <stdio.h>
 //ц╟ещеепР
-void BubbleSort(int* arr[], int sz)
+void BubbleSort(int arr[], int sz)
 {
 	int i = 0;
 	int j = 0;
 	for (j = 0; j < sz; j++)
 	{
-		for (i = 0; i < sz-j; i++)
+		for (i = 0; i < sz-j-1; i++)
 		{
 			int ret = 0;
 			if (arr[i] > arr[i + 1])
