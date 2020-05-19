@@ -20,16 +20,16 @@ void SeqListInit(SeqList* s, int initCapacity)
 }
 void check_capacity(SeqList* s)
 {
-	int newcapacity = 2 * s->capacity;
 	if (s->size == s->capacity)
 	{
+		int newcapacity = 2 * (s->capacity);
 		SDataType* tmp = (SDataType*)realloc(s->array, newcapacity*sizeof(SDataType));
 		if (tmp != NULL)
 		{
 			s->array = tmp;
 		}
+		s->capacity = newcapacity;
 	}
-	s->capacity = newcapacity;
 }
 
 
@@ -204,7 +204,6 @@ void test1()
 {
 	SeqList s;
 	SeqListInit(&s, 3);
-
 	SeqListPushBack(&s, 1);
 	SeqListPushBack(&s, 2);
 	SeqListPushBack(&s, 3);
@@ -213,9 +212,15 @@ void test1()
 	SeqListPushBack(&s, 6);
 	Seqlist_print(&s);
 
+	//SeqListPopBack(&s);
+	//SeqListPushFront(&s, 3);
+	//SeqListPopFront(&s);
+	//SeqListInsert(&s, 3, 9);
+	//SeqListErase(&s, 4);
+	/*int ret = SeqListFind(&s, 3);
+	printf("%d\n", ret);*/
 
-
-	//Seqlist_print(&s);
+	Seqlist_print(&s);
 	SeqListClear(&s);
 	SeqListDestroy(&s);
 }
