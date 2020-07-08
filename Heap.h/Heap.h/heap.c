@@ -160,5 +160,7 @@ void TestHeap()
 	printf("heap size = %d\n", HeapSize(&hp));
 	printf("heap top = %d\n", HeapTop(&hp));
 
+	HeapPush(&hp, -1);
+
 	HeapDestroy(&hp);
 }
