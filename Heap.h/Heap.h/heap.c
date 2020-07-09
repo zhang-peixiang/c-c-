@@ -1,8 +1,18 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 #include "heap.h"
 
+int Less(HDataType left, HDataType right)
+{
+	return left < right;
+}
+int Greater(HDataType left, HDataType right)
+{
+	return left > right;
+}
+
+
 //初始化堆
-void HeapInit(Heap* hp, int initCap)
+void HeapInit(Heap* hp, int initCap,CMP cmp)
 {
 	assert(hp);
 	initCap = initCap < 10 ? 10 : initCap;
@@ -15,6 +25,7 @@ void HeapInit(Heap* hp, int initCap)
 
 	hp->capacity = initCap;
 	hp->size = 0;
+	hp->cmp = cmp;
 }
 
 void Swap(HDataType* left, HDataType* right)
@@ -24,21 +35,24 @@ void Swap(HDataType* left, HDataType* right)
 	*right = tmp;
 }
 
-void AdjustDown(HDataType* array, int size, int parent)
+void AdjustDown(Heap* hp, int parent)
 {
+	HDataType* array = hp->array;
+	int size = hp->size;
+	CMP cmp = hp->cmp;
 	//用child标记parent的较小的孩子--默认先标记parent的左孩子
 	int child = parent * 2 + 1;
 	while (child < size)
 	{
 		//找到parent两个孩子中较小的孩子
-		if (child + 1 < size && array[child + 1] < array[child])
+		if (child + 1 < size && cmp(array[child + 1],array[child]))
 		{
 			child += 1;
 		}
 		//parent较小的孩子已经找到
 		//检测parnt是否满足堆的性质
 
-		if (array[child] < array[parent])
+		if (cmp(array[child] ,array[parent]))
 		{
 			Swap(&array[child], &array[parent]);
 			parent = child;
@@ -51,17 +65,17 @@ void AdjustDown(HDataType* array, int size, int parent)
 
 
 //用数组中的元素创建堆
-void HeapCreate(Heap* hp, HDataType* array, int size)
+void HeapCreate(Heap* hp, HDataType* array, int size,CMP cmp)
 {
 	int root = 0;
 	//1.先将数组中的元素放在堆结构中
-	HeapInit(hp, size);
+	HeapInit(hp, size,cmp);
 	memcpy(hp->array, array, sizeof(HDataType)*size);
 	hp->size = size;
 	//2.进行调整
 	for (root = (size - 2) / 2; root >= 0; root--)
 	{
-		AdjustDown(hp->array, hp->size, root);
+		AdjustDown(hp, root);
 	}
 }
 void CheckCapacity(Heap* hp)
@@ -78,12 +92,15 @@ void CheckCapacity(Heap* hp)
 	}
 }
 
-void AdjustUP(HDataType* array, int size, int child)
+void AdjustUP(Heap* hp,int child)
 {
+	HDataType* array = hp->array;
+	int size = hp->size;
+	CMP cmp = hp->cmp;
 	int parent = (child - 1) / 2;
 	while (parent >= 0)
 	{
-		if (array[child] < array[parent])
+		if (cmp(array[child] ,array[parent]))
 		{
 			Swap(&array[child], &array[parent]);
 
@@ -104,7 +121,7 @@ void HeapPush(Heap* hp, HDataType data)
 	hp->array[hp->size++] = data;
 
 	//2.新元素插入后，可能会破坏堆的性质
-	AdjustUP(hp->array, hp->size, hp->size - 1);
+	AdjustUP(hp, hp->size - 1);
 
 }
 void HeapPop(Heap* hp)
@@ -115,7 +132,7 @@ void HeapPop(Heap* hp)
 	Swap(&hp->array[0], &hp->array[hp->size - 1]);
 	hp->size--;
 
-	AdjustDown(hp->array, hp->size, 0);
+	AdjustDown(hp, 0);
 }
 
 
@@ -152,7 +169,7 @@ void TestHeap()
 {
 	int array[] = { 3, 6, 9, 1, 5, 3, 0, 7, 8, 4 };
 	Heap hp;
-	HeapCreate(&hp, array, sizeof(array) / sizeof(array[0]));
+	HeapCreate(&hp, array, sizeof(array) / sizeof(array[0]),Greater);
 	printf("heap size = %d\n", HeapSize(&hp));
 	printf("heap top = %d\n", HeapTop(&hp));
 
