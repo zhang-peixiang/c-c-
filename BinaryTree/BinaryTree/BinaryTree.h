@@ -24,6 +24,6 @@ int GetLeafNodeCount(BTNode* root); //获取二叉树中叶子节点的个数
 int GetKLevelNodeCount(BTNode* root, unsigned int k); //获取二叉树中第K层节点的个数
 BTNode* Find(BTNode* root, BTNDataType data); //找值为data的节点
 int GetHeight(BTNode* root); //获取二叉树的高度
-
+int BinaryTreeComplete(BTNode* root);//判断是否是完全二叉树
 
 void DestroyTree(BTNode** root);
