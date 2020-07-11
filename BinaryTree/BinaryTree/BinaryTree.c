@@ -126,6 +126,63 @@ int GetHeight(BTNode* root) //获取二叉树的高度
 }
 
 
+int BinaryTreeComplete(BTNode* root)
+{
+	Queue q;
+	
+	int flag = 0;
+	int ret = 0;
+	//空树也是完全二叉树
+	if (root == NULL)
+		return 1;
+
+	//非空
+	//1.按照层序遍历规则找到第一个不饱和的节点
+	QueueInit(&q);
+	QueuePush(&q, root);
+	while (!QueueEmpty(&q))
+	{
+		BTNode* cur = QueueFront(&q);
+
+		if (flag)
+		{
+			//flag 不为0 表示不饱和的节点已经找到，后面的节点不能又孩子
+			if (cur->left || cur->right)
+				break;
+		}
+		else
+		{
+			//找第一个不饱和的节点
+			if (cur->left && cur->right)
+			{
+				QueuePush(&q, cur->left);
+				QueuePush(&q, cur->right);
+			}
+			else if (cur->left)
+			{
+				//cur只有左孩子
+				QueuePush(&q, cur->left);
+				flag = 1;
+			}
+			else if (cur->right)
+			{
+				//cur只有右孩子
+				break;
+			}
+			else
+			{
+				flag = 1;
+			}
+			QueuePop(&q);
+		}
+	}
+	if (QueueEmpty(&q))
+		ret = 1;
+	QueueDestroy(&q);
+	return ret;
+}
+
+
 void DestroyTree(BTNode** root)
 {
 	assert(root);
