@@ -2,6 +2,43 @@
 #include "BinaryTree.h"
 #include "Queue.h"
 
+BTNode* BuyBinTreeNode(int data)
+{
+	BTNode* root = (BTNode*)malloc(sizeof(BTNode));
+
+	if (root == NULL)
+	{
+		assert(0);
+		return;
+	}
+	root->data = data;
+	root->left = NULL;
+	root->right = NULL;
+
+	return root;
+}
+
+
+BTNode* CreateBinTree(int array[], int size,int index,int invalid)
+{
+	BTNode* root = NULL;
+	if (index < size && array[index] != '#')
+	{
+		//创建根节点
+		root = BuyBinTreeNode(array[index]);
+
+		//创建根节点的左子树
+		root->left = CreateBinTree(array, size, ++index,invalid);
+
+		//创建根节点的右子树
+		root->right = CreateBinTree(array, size, ++index,invalid);
+
+	}
+	return root;
+}
+
+
+
 //前序遍历
 void PreOrder(BTNode* root)
 {
@@ -65,6 +102,27 @@ void LevelOrder(BTNode* root)
 	}
 
 	QueueDestroy(&q);
+}
+
+BTNode* CopyBinTree(BTNode* root)
+{
+	BTNode* newroot = NULL;
+
+	if (root)
+	{
+		//拷贝根节点
+		newroot = BuyBinTreeNode(root->data);
+
+		//拷贝根节点的左子树
+		newroot->left = CopyBinTree(root->left);
+
+
+		//拷贝根节点的右子树
+		newroot->right = CopyBinTree(root->right);
+
+	}
+
+	return newroot;
 }
 
 
