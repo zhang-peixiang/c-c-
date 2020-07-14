@@ -1,7 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 #include "Queue.h"
 
-QNode* BuyNode(int data)
+QNode* BuyNode(QDataType data)
 {
 	QNode* newnode = (QNode*)malloc(sizeof(QNode));
 	if (newnode == NULL)
