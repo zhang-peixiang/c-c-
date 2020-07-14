@@ -19,19 +19,21 @@ BTNode* BuyBinTreeNode(int data)
 }
 
 
-BTNode* CreateBinTree(int array[], int size,int index,int invalid)
+BTNode* CreateBinTree(int array[], int size,int* index,int invalid)
 {
 	BTNode* root = NULL;
-	if (index < size && array[index] != '#')
+	if (*index < size && array[*index] != invalid)
 	{
 		//创建根节点
-		root = BuyBinTreeNode(array[index]);
+		root = BuyBinTreeNode(array[*index]);
 
 		//创建根节点的左子树
-		root->left = CreateBinTree(array, size, ++index,invalid);
+		++(*index);
+		root->left = CreateBinTree(array, size, index, invalid);
 
 		//创建根节点的右子树
-		root->right = CreateBinTree(array, size, ++index,invalid);
+		++(*index);
+		root->right = CreateBinTree(array, size, index,invalid);
 
 	}
 	return root;
@@ -252,4 +254,15 @@ void DestroyTree(BTNode** root)
 		free(*root);
 		*root = NULL;
 	}
+}
+
+
+void TestBinTree()
+{
+	int array[] = { 1, 2, 3, -1, -1, -1, 4, 5, -1, -1, 6 };
+	int index = 0;
+	BTNode* root = CreateBinTree(array, sizeof(array) / sizeof(array[0]), &index, -1);
+
+
+	DestroyTree(&root);
 }
