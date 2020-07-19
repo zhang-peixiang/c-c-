@@ -26,6 +26,12 @@ void BubbleSortOP(int* array, int size);
 //快速排序
 void QuickSort(int* array, int left, int right);
 
+//快速排序--递归变循环
+void QuickSortNor(int* array, int size);
+
+//归并排序
+void MergeSort(int* array, int size);
+
 //////////////////////////////
 
 void test();

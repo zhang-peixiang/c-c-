@@ -1,4 +1,5 @@
 #include "sort.h"
+#include "stack.h"
 
 void PrintArray(int* array, int size)
 {
@@ -242,10 +243,38 @@ void BubbleSortOP(int* array, int size)
 }
 
 
+//三数取中法-----快排里面的基准值取三数中最中间的数
+int GetMiddleIndex(int* array, int left, int right)
+{
+	int mid = left + ((right - left) >> 1);
+	if (array[left] < array[right - 1])
+	{
+		if (array[mid] < array[left])
+			return left;
+		else if (array[mid]>array[right - 1])
+			return right - 1;
+		else
+			return mid;
+	}
+	else
+	{
+		if (array[mid] > array[left])
+			return left;
+		else if (array[mid] < array[right - 1])
+			return right - 1;
+		else
+			return mid;
+
+	}
+}
+
 //常规法
 int Partion1(int* array, int left, int right)
 {
-	int key = array[right - 1];
+	int keyofindex = GetMiddleIndex(array, left, right);
+	if (keyofindex != right-1)
+		Swap(&array[keyofindex], &array[right - 1]);
+	int key = array[keyofindex];
 	int begin = left;
 	int end = right - 1;
 	while (begin<end)
@@ -275,9 +304,12 @@ int Partion1(int* array, int left, int right)
 //挖坑法
 int Partion2(int* array, int left, int right)
 {
+	int keyofindex = GetMiddleIndex(array, left, right);
+	if (keyofindex != right - 1)
+		Swap(&array[keyofindex], &array[right - 1]);
 	int begin = left;
 	int end = right - 1;
-	int key = array[end];
+	int key = array[keyofindex];
 	while (begin < end)
 	{
 		//end位置形成了一个新的坑
@@ -305,9 +337,13 @@ int Partion2(int* array, int left, int right)
 //双指针法
 int Partion3(int* array, int left, int right)
 {
+	//采用三数取中法降低取到极值的概率
+	int keyofindex = GetMiddleIndex(array, left, right);
+	if (keyofindex != right - 1)
+		Swap(&array[keyofindex], &array[right - 1]);
 	int cur = left;
 	int prev = left - 1;
-	int key = array[right - 1];
+	int key = array[keyofindex];
 	
 	while (cur < right)
 	{
@@ -325,7 +361,11 @@ int Partion3(int* array, int left, int right)
 //[left,right] 表示待排序元素的区间
 void QuickSort(int* array, int left, int right)
 {
-	if(right-left>1)
+	if (right - left < 16)//当数据量较少时，用插入排序效率高
+	{
+		InsertSort(array, right - left);
+	}
+	else
 	{
 		//Partion按照基准值（就是区间中的某个元素）对区间进行划分成两部分，左部分元素比基准值小，右侧部分比基准值大
 		//该函数返回基准值在区间中的位置
@@ -337,6 +377,42 @@ void QuickSort(int* array, int left, int right)
 	}
 }
 
+//快速排序--递归变循环
+void QuickSortNor(int* array, int size)
+{
+	Stack s;
+	
+	int left = 0;
+	int right = size;
+	StackInit(&s);
+
+	StackPush(&s, right);
+	StackPush(&s, left);
+
+	while (StackEmpty(&s)==0)
+	{
+		//先按照基准值来进行划分
+		left = StackTop(&s);
+		StackPop(&s);
+
+		right = StackTop(&s);
+		StackPop(&s);
+
+		if (right - left > 1)
+		{
+			int div = Partion1(array, left, right);
+
+			//排基准值左半侧--将右半部分入栈[div+1,right)
+			StackPush(&s, right);
+			StackPush(&s, div + 1);
+
+			// 排基准值的右半侧--将左部分的区间入栈[left,div)
+			StackPush(&s, div);
+			StackPush(&s, left);
+		}
+	}
+	StackDestroy(&s);
+}
 
 
 ///////////////////////////////////////////////////////
@@ -358,6 +434,8 @@ void test()
 	//PrintArray(array, sizeof(array) / sizeof(array[0]));
 	//QuickSort(array, 0, sizeof(array) / sizeof(array[0]));
 	//PrintArray(array, sizeof(array) / sizeof(array[0]));
-	BubbleSortOP(array, sizeof(array) / sizeof(array[0]));
+	//BubbleSortOP(array, sizeof(array) / sizeof(array[0]));
+	//PrintArray(array, sizeof(array) / sizeof(array[0]));
+	QuickSortNor(array, sizeof(array) / sizeof(array[0]));
 	PrintArray(array, sizeof(array) / sizeof(array[0]));
 }
