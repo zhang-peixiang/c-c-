@@ -414,6 +414,50 @@ void QuickSortNor(int* array, int size)
 	StackDestroy(&s);
 }
 
+void MergeData(int* array, int left,int mid, int right, int* tmp)
+{
+	int index1 = left;
+	int index2 = mid;
+	int index = left;
+	while (index1 < mid && index2 < right)
+	{
+		if (array[index1]>array[index2])
+			tmp[index++] = array[index2++];
+		else
+			tmp[index++] = array[index1++];
+	}
+	while (index1<mid)
+		tmp[index++] = array[index1++];
+	while (index2<right)
+		tmp[index++] = array[index2++];
+}
+
+void _MergeSort(int* array, int left, int right,int* tmp)
+{
+	if (right - left>1)
+	{
+		int mid = left + ((right - left) >> 1);
+
+		_MergeSort(array, left, mid, tmp);
+
+		_MergeSort(array, mid, right, tmp);
+		
+		MergeData(array, left, mid, right, tmp);
+
+		memcpy(array + left, tmp + left, (right - left)*sizeof(array[left]));
+	}
+
+}
+//πÈ≤¢≈≈–Ú
+void MergeSort(int* array, int size)
+{
+	int* tmp = (int*)malloc(sizeof(array[0])*size);
+	if (tmp == NULL)
+		return;
+
+	_MergeSort(array, 0, size, tmp);
+	free(tmp);
+}
 
 ///////////////////////////////////////////////////////
 void test()
@@ -436,6 +480,9 @@ void test()
 	//PrintArray(array, sizeof(array) / sizeof(array[0]));
 	//BubbleSortOP(array, sizeof(array) / sizeof(array[0]));
 	//PrintArray(array, sizeof(array) / sizeof(array[0]));
-	QuickSortNor(array, sizeof(array) / sizeof(array[0]));
+	//QuickSortNor(array, sizeof(array) / sizeof(array[0]));
+	//PrintArray(array, sizeof(array) / sizeof(array[0]));
+	MergeSort(array, sizeof(array) / sizeof(array[0]));
 	PrintArray(array, sizeof(array) / sizeof(array[0]));
+
 }
