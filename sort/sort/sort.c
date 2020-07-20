@@ -426,8 +426,11 @@ void MergeData(int* array, int left,int mid, int right, int* tmp)
 		else
 			tmp[index++] = array[index1++];
 	}
+
+	// [left,mid) 区间中的数据还没有搬移完
 	while (index1<mid)
 		tmp[index++] = array[index1++];
+	// [mid，right) 区间中的数据还没有搬移完
 	while (index2<right)
 		tmp[index++] = array[index2++];
 }
@@ -438,12 +441,16 @@ void _MergeSort(int* array, int left, int right,int* tmp)
 	{
 		int mid = left + ((right - left) >> 1);
 
+		// [left,min)
 		_MergeSort(array, left, mid, tmp);
 
+		// [mid,right)
 		_MergeSort(array, mid, right, tmp);
 		
+		// 将[left,mid) 和 [mid,right) 有序区间进行归并
 		MergeData(array, left, mid, right, tmp);
 
+		// 归并好之后，有序的数据在tmp,将tmp中有序的结果拷贝到原数组中
 		memcpy(array + left, tmp + left, (right - left)*sizeof(array[left]));
 	}
 
@@ -458,6 +465,79 @@ void MergeSort(int* array, int size)
 	_MergeSort(array, 0, size, tmp);
 	free(tmp);
 }
+
+//归并排序循环
+//将上述的递归倒过来来，先一个一个排序 然后两个两个 再然后四个四个······
+void MergeSortNor(int* array, int size)
+{
+	int gap = 1;
+	int i = 0;
+	int* tmp = (int*)malloc(sizeof(array[0])*size);
+	while (gap < size)
+	{
+		for (i = 0; i < size; i += 2 * gap)
+		{
+			int left = i;
+			int mid = left + gap;
+			int right = mid + gap;
+
+			if (mid>size)
+				mid = size;
+			if (right>size)
+				right = size;
+
+			// [left,mid) 和 [mid,right) 每个分组中有gap
+			MergeData(array, left, mid, right, tmp);
+		}
+
+		memcpy(array, tmp, sizeof(array[0])*size);
+		gap *= 2;
+	}
+}
+
+
+// 计数排序
+//场景：数据密集集中在某个范围内
+void CountSort(int* array, int size)
+{
+	// 1.找数据--找最大值和最小值
+	int minValue = array[0];
+	int maxValue = array[0];
+	int i = 0;
+	int index = 0;
+	for (i = 1; i < size; i++)
+	{
+		if (array[i]>maxValue)
+			maxValue = array[i];
+		if (array[i] < minValue)
+			minValue = array[i];
+	}
+
+	// 2.计算用来计数的空间个数： maxValue-minValue+1,申请用来保存计数的空间
+	int range = maxValue - minValue + 1;
+	int* tmp = (int*)calloc(sizeof(array[0]),range);
+	if (tmp == NULL)
+		return;
+
+	// 3. 统计区间中每个元素出现的个数
+	for (i = 0; i < size; i++)
+	{
+		tmp[array[i] - minValue]++;
+	}
+
+	// 4. 回收
+	for (i = 0; i < range; i++)
+	{
+		while (tmp[i]--)
+		{
+			array[index++] = i + minValue;
+		}
+	}
+	
+	free(tmp);
+	tmp = NULL;
+}
+
 
 ///////////////////////////////////////////////////////
 void test()
@@ -482,7 +562,11 @@ void test()
 	//PrintArray(array, sizeof(array) / sizeof(array[0]));
 	//QuickSortNor(array, sizeof(array) / sizeof(array[0]));
 	//PrintArray(array, sizeof(array) / sizeof(array[0]));
-	MergeSort(array, sizeof(array) / sizeof(array[0]));
+	//MergeSort(array, sizeof(array) / sizeof(array[0]));
+	//PrintArray(array, sizeof(array) / sizeof(array[0]));
+	//MergeSortNor(array, sizeof(array) / sizeof(array[0]));
+	//PrintArray(array, sizeof(array) / sizeof(array[0]));
+	CountSort(array, sizeof(array) / sizeof(array[0]));
 	PrintArray(array, sizeof(array) / sizeof(array[0]));
 
 }
