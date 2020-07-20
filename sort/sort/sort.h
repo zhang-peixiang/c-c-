@@ -1,6 +1,10 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 #include <stdio.h>
 
+
+////////////////////////////////////////////////
+// 比较排序
+
 //插入排序
 void InsertSort(int* array, int size);
 
@@ -31,6 +35,15 @@ void QuickSortNor(int* array, int size);
 
 //归并排序
 void MergeSort(int* array, int size);
+
+//归并排序循环
+void MergeSortNor(int* array, int size);
+
+///////////////////////////////////////////////////////
+// 非比较排序
+
+// 计数排序
+void CountSort(int* array, int size);
 
 //////////////////////////////
 
