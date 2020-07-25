@@ -24,14 +24,14 @@ BTNode* CreateBinTree(int array[], int size,int* index,int invalid)
 	BTNode* root = NULL;
 	if (*index < size && array[*index] != invalid)
 	{
-		//´´½¨¸ù½Úµã
+		//åˆ›å»ºæ ¹èŠ‚ç‚¹
 		root = BuyBinTreeNode(array[*index]);
 
-		//´´½¨¸ù½ÚµãµÄ×ó×ÓÊ÷
+		//åˆ›å»ºæ ¹èŠ‚ç‚¹çš„å·¦å­æ ‘
 		++(*index);
 		root->left = CreateBinTree(array, size, index, invalid);
 
-		//´´½¨¸ù½ÚµãµÄÓÒ×ÓÊ÷
+		//åˆ›å»ºæ ¹èŠ‚ç‚¹çš„å³å­æ ‘
 		++(*index);
 		root->right = CreateBinTree(array, size, index,invalid);
 
@@ -41,7 +41,7 @@ BTNode* CreateBinTree(int array[], int size,int* index,int invalid)
 
 
 
-//Ç°Ğò±éÀú
+//å‰åºéå†
 void PreOrder(BTNode* root)
 {
 	if (root)
@@ -52,7 +52,7 @@ void PreOrder(BTNode* root)
 	}
 }
 
-//ÖĞĞò±éÀú
+//ä¸­åºéå†
 void InOrder(BTNode* root)
 {
 	if (root)
@@ -63,7 +63,7 @@ void InOrder(BTNode* root)
 	}
 }
 
-//ºóĞò±éÀú
+//ååºéå†
 void PostOrder(BTNode* root)
 {
 	if (root)
@@ -76,7 +76,7 @@ void PostOrder(BTNode* root)
 
 
 
-//²ãĞò±éÀú
+//å±‚åºéå†
 void LevelOrder(BTNode* root)
 {
 	Queue q;
@@ -112,14 +112,14 @@ BTNode* CopyBinTree(BTNode* root)
 
 	if (root)
 	{
-		//¿½±´¸ù½Úµã
+		//æ‹·è´æ ¹èŠ‚ç‚¹
 		newroot = BuyBinTreeNode(root->data);
 
-		//¿½±´¸ù½ÚµãµÄ×ó×ÓÊ÷
+		//æ‹·è´æ ¹èŠ‚ç‚¹çš„å·¦å­æ ‘
 		newroot->left = CopyBinTree(root->left);
 
 
-		//¿½±´¸ù½ÚµãµÄÓÒ×ÓÊ÷
+		//æ‹·è´æ ¹èŠ‚ç‚¹çš„å³å­æ ‘
 		newroot->right = CopyBinTree(root->right);
 
 	}
@@ -128,7 +128,7 @@ BTNode* CopyBinTree(BTNode* root)
 }
 
 
-int GetNodeCount(BTNode* root) //»ñÈ¡¶ş²æÊ÷ÖĞ½ÚµãµÄ¸öÊı
+int GetNodeCount(BTNode* root) //è·å–äºŒå‰æ ‘ä¸­èŠ‚ç‚¹çš„ä¸ªæ•°
 {
 	
 	if (root == NULL)
@@ -137,7 +137,7 @@ int GetNodeCount(BTNode* root) //»ñÈ¡¶ş²æÊ÷ÖĞ½ÚµãµÄ¸öÊı
 	return GetNodeCount(root->left) + GetNodeCount(root->right) + 1;
 }
 
-int GetLeafNodeCount(BTNode* root)//»ñÈ¡¶ş²æÊ÷ÖĞÒ¶×Ó½ÚµãµÄ¸öÊı
+int GetLeafNodeCount(BTNode* root)//è·å–äºŒå‰æ ‘ä¸­å¶å­èŠ‚ç‚¹çš„ä¸ªæ•°
 {
 	if (root == NULL)
 		return 0;
@@ -147,7 +147,7 @@ int GetLeafNodeCount(BTNode* root)//»ñÈ¡¶ş²æÊ÷ÖĞÒ¶×Ó½ÚµãµÄ¸öÊı
 }
 
 
-int GetKLevelNodeCount(BTNode* root, unsigned int k)//»ñÈ¡¶ş²æÊ÷ÖĞµÚK²ã½ÚµãµÄ¸öÊı
+int GetKLevelNodeCount(BTNode* root, unsigned int k)//è·å–äºŒå‰æ ‘ä¸­ç¬¬Kå±‚èŠ‚ç‚¹çš„ä¸ªæ•°
 {
 	if (root == NULL || k == 0)
 		return 0;
@@ -158,7 +158,7 @@ int GetKLevelNodeCount(BTNode* root, unsigned int k)//»ñÈ¡¶ş²æÊ÷ÖĞµÚK²ã½ÚµãµÄ¸öÊ
 }
 
 
-BTNode* Find(BTNode* root, BTNDataType data) //ÕÒÖµÎªdataµÄ½Úµã
+BTNode* Find(BTNode* root, BTNDataType data) //æ‰¾å€¼ä¸ºdataçš„èŠ‚ç‚¹
 {
 	BTNode* ret = NULL;
 	if (root == NULL)
@@ -173,7 +173,7 @@ BTNode* Find(BTNode* root, BTNDataType data) //ÕÒÖµÎªdataµÄ½Úµã
 }
 
 
-int GetHeight(BTNode* root) //»ñÈ¡¶ş²æÊ÷µÄ¸ß¶È
+int GetHeight(BTNode* root) //è·å–äºŒå‰æ ‘çš„é«˜åº¦
 {
 	int leftHeight = 0, rightHeight = 0;
 	if (root == NULL)
@@ -192,12 +192,12 @@ int BinaryTreeComplete(BTNode* root)
 	
 	int flag = 0;
 	int ret = 0;
-	//¿ÕÊ÷Ò²ÊÇÍêÈ«¶ş²æÊ÷
+	//ç©ºæ ‘ä¹Ÿæ˜¯å®Œå…¨äºŒå‰æ ‘
 	if (root == NULL)
 		return 1;
 
-	//·Ç¿Õ
-	//1.°´ÕÕ²ãĞò±éÀú¹æÔòÕÒµ½µÚÒ»¸ö²»±¥ºÍµÄ½Úµã
+	//éç©º
+	//1.æŒ‰ç…§å±‚åºéå†è§„åˆ™æ‰¾åˆ°ç¬¬ä¸€ä¸ªä¸é¥±å’Œçš„èŠ‚ç‚¹
 	QueueInit(&q);
 	QueuePush(&q, root);
 	while (!QueueEmpty(&q))
@@ -206,13 +206,13 @@ int BinaryTreeComplete(BTNode* root)
 
 		if (flag)
 		{
-			//flag ²»Îª0 ±íÊ¾²»±¥ºÍµÄ½ÚµãÒÑ¾­ÕÒµ½£¬ºóÃæµÄ½Úµã²»ÄÜÓÖº¢×Ó
+			//flag ä¸ä¸º0 è¡¨ç¤ºä¸é¥±å’Œçš„èŠ‚ç‚¹å·²ç»æ‰¾åˆ°ï¼Œåé¢çš„èŠ‚ç‚¹ä¸èƒ½åˆå­©å­
 			if (cur->left || cur->right)
 				break;
 		}
 		else
 		{
-			//ÕÒµÚÒ»¸ö²»±¥ºÍµÄ½Úµã
+			//æ‰¾ç¬¬ä¸€ä¸ªä¸é¥±å’Œçš„èŠ‚ç‚¹
 			if (cur->left && cur->right)
 			{
 				QueuePush(&q, cur->left);
@@ -220,21 +220,21 @@ int BinaryTreeComplete(BTNode* root)
 			}
 			else if (cur->left)
 			{
-				//curÖ»ÓĞ×óº¢×Ó
+				//curåªæœ‰å·¦å­©å­
 				QueuePush(&q, cur->left);
 				flag = 1;
 			}
 			else if (cur->right)
 			{
-				//curÖ»ÓĞÓÒº¢×Ó
+				//curåªæœ‰å³å­©å­
 				break;
 			}
 			else
 			{
 				flag = 1;
 			}
-			QueuePop(&q);
 		}
+		QueuePop(&q);
 	}
 	if (QueueEmpty(&q))
 		ret = 1;
