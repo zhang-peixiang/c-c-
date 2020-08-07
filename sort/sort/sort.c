@@ -272,9 +272,9 @@ int GetMiddleIndex(int* array, int left, int right)
 int Partion1(int* array, int left, int right)
 {
 	int keyofindex = GetMiddleIndex(array, left, right);
-	if (keyofindex != right-1)
+	if (keyofindex != right - 1)
 		Swap(&array[keyofindex], &array[right - 1]);
-	int key = array[keyofindex];
+	int key = array[right - 1];
 	int begin = left;
 	int end = right - 1;
 	while (begin<end)
@@ -283,20 +283,18 @@ int Partion1(int* array, int left, int right)
 		{
 			begin++;
 		}
-		while (begin<end && array[end]>=key)
+		while (begin<end && array[end] >= key)
 		{
 			end--;
 		}
 		if (begin<end)
 		{
 			Swap(&array[begin], &array[end]);
-			begin++;
-			end--;
 		}
 	}
-	if (begin!=right-1)
+	if (begin != right - 1)
 	{
-		Swap(&array[begin], &array[right-1]);
+		Swap(&array[begin], &array[right - 1]);
 	}
 	return begin;
 }
@@ -309,7 +307,7 @@ int Partion2(int* array, int left, int right)
 		Swap(&array[keyofindex], &array[right - 1]);
 	int begin = left;
 	int end = right - 1;
-	int key = array[keyofindex];
+	int key = array[end];
 	while (begin < end)
 	{
 		//end位置形成了一个新的坑
@@ -329,7 +327,7 @@ int Partion2(int* array, int left, int right)
 			array[begin++] = array[end];
 	}
 	//用基准值填最后的一个坑
-	if (begin != right-1)
+	if (begin != right - 1)
 		array[begin] = key;
 	return begin;
 }
@@ -343,15 +341,15 @@ int Partion3(int* array, int left, int right)
 		Swap(&array[keyofindex], &array[right - 1]);
 	int cur = left;
 	int prev = left - 1;
-	int key = array[keyofindex];
-	
+	int key = array[right - 1];
+
 	while (cur < right)
 	{
 		if (array[cur] < key && ++prev != cur) //++prev 标记的是比key大的数  cur标记的是比key小的数
 			Swap(&array[cur], &array[prev]);
 		cur++;
 	}
-	
+
 	if (++prev != right - 1)
 		Swap(&array[right - 1], &array[prev]);
 	return prev;
@@ -361,16 +359,13 @@ int Partion3(int* array, int left, int right)
 //[left,right] 表示待排序元素的区间
 void QuickSort(int* array, int left, int right)
 {
-	if (right - left < 16)//当数据量较少时，用插入排序效率高
-	{
-		InsertSort(array, right - left);
-	}
-	else
+
+	if (right - left>1)
 	{
 		//Partion按照基准值（就是区间中的某个元素）对区间进行划分成两部分，左部分元素比基准值小，右侧部分比基准值大
 		//该函数返回基准值在区间中的位置
 		//[left,right] 区间中的基准值位置已经存放好了，基准值左侧和右侧不一定有序
-		int div = Partion3(array, left, right);
+		int div = Partion2(array, left, right);
 
 		QuickSort(array, left, div);
 		QuickSort(array, div + 1, right);
