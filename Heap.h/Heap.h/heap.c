@@ -83,9 +83,9 @@ void CheckCapacity(Heap* hp)
 	if (hp->size == hp->capacity)
 	{
 		HDataType* tmp = (HDataType*)malloc(sizeof(HDataType)*hp->size * 2);
-
 		if (tmp != NULL)
 		{
+			memcpy(tmp, hp->array, (hp->size)*sizeof(hp->array[0]));
 			hp->array = tmp;
 			hp->capacity = hp->size * 2;
 		}
@@ -173,11 +173,13 @@ void TestHeap()
 	printf("heap size = %d\n", HeapSize(&hp));
 	printf("heap top = %d\n", HeapTop(&hp));
 
+	HeapPush(&hp, -1);
+
 	HeapPop(&hp);
 	printf("heap size = %d\n", HeapSize(&hp));
 	printf("heap top = %d\n", HeapTop(&hp));
 
-	HeapPush(&hp, -1);
+	
 
 	HeapDestroy(&hp);
 }
